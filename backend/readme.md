@@ -2,18 +2,18 @@
 
 ## Para fazer
 
-[ ] Adicionar Typescript
+[x] Adicionar Typescript
 
-[ ] Configurar Typescript
+[x] Configurar Typescript
  
-[ ] Criar servidor
+[x] Criar servidor
  
-[ ] Configurar express
+[x] Configurar express
  
 [ ] Mapear Rotas
  
-[ ] Modelar entidades
+[x] Modelar entidades
  
-[ ] Mapear Casos de uso
+[x] Mapear Casos de uso
  
 [ ] Validar Inputs
