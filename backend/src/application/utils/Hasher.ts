@@ -1,4 +1,4 @@
-export interface PasswordHasher {
+export default interface PasswordHasher {
   hashPassword(password: string): Promise<string>;
   comparePassword(
     plainPassword: string,

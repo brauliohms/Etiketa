@@ -1,9 +1,9 @@
 import CreateAccountUseCase from '../../application/usecases/CreateAccount';
 import GetAccountUseCase from '../../application/usecases/Authenticate';
 import HttpServer from '../http/HttpServer';
-import { AuthMiddleware } from '../http/middlewares/AuthMiddleware';
+import AuthMiddleware from '../http/middlewares/AuthMiddleware';
 
-export class AccountController {
+export default class AccountController {
   constructor(
     private httpServer: HttpServer,
     private accountUseCase: CreateAccountUseCase,

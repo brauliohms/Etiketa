@@ -1,15 +1,15 @@
 import 'dotenv/config';
+import cors from 'cors';
 import path from 'node:path';
 import CreateAccountUseCase from './application/usecases/CreateAccount';
 import ExpressAdapter from './infra/http/ExpressHttpAdapter';
 import KnexAccountsRepository from './infra/repositories/AccountRepository';
-import { JwtTokenService } from './infra/utils/JsonWebToken';
-import { BcryptPasswordHasher } from './infra/utils/Bcrypt';
+import JwtTokenService from './infra/utils/JsonWebToken';
+import BcryptPasswordHasher from './infra/utils/Bcrypt';
 import AuthenticateUseCase from './application/usecases/Authenticate';
-import { AccountController } from './infra/controllers/AccountController';
-import { AuthMiddleware } from './infra/http/middlewares/AuthMiddleware';
+import AccountController from './infra/controllers/AccountController';
+import AuthMiddleware from './infra/http/middlewares/AuthMiddleware';
 import EnvChecker from './infra/configs/EnvsChecker';
-import cors from 'cors';
 
 EnvChecker.checkEnvVariables([
   'PORT',
