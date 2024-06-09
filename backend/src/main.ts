@@ -9,6 +9,7 @@ import AuthenticateUseCase from './application/usecases/Authenticate';
 import { AccountController } from './infra/controllers/AccountController';
 import { AuthMiddleware } from './infra/http/middlewares/AuthMiddleware';
 import EnvChecker from './infra/configs/EnvsChecker';
+import cors from 'cors';
 
 EnvChecker.checkEnvVariables([
   'PORT',
@@ -49,4 +50,5 @@ const swaggerFilePath = path.resolve(
 );
 
 expressHttpServer.setupSwagger(swaggerFilePath);
+expressHttpServer.use(cors());
 expressHttpServer.listen(Number(process.env.PORT));

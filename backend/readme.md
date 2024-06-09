@@ -10,10 +10,10 @@
  
 [x] Configurar express
  
-[ ] Mapear Rotas
+[x] Mapear Rotas
  
 [x] Modelar entidades
  
 [x] Mapear Casos de uso
  
-[ ] Validar Inputs
+[x] Validar Inputs
