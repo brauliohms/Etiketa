@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { AuthToken } from '../../application/utils/AuthToken';
 
-export class JwtTokenService implements AuthToken {
+export default class JwtTokenService implements AuthToken {
   private static readonly secretKey = process.env.JWT_SECRET as string;
 
   generateToken(payload: Input): string {

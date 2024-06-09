@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { JwtTokenService } from '../../utils/JsonWebToken';
-import { JwtPayload } from 'jsonwebtoken'; // Ou qualquer tipo que você use para o payload do JWT
+import JwtTokenService from '../../utils/JsonWebToken';
+import { JwtPayload } from 'jsonwebtoken';
 
 declare module 'express-serve-static-core' {
   interface Request {
@@ -8,7 +8,7 @@ declare module 'express-serve-static-core' {
   }
 }
 
-export class AuthMiddleware {
+export default class AuthMiddleware {
   constructor(private jwtService: JwtTokenService) {}
 
   async handle(req: Request, res: Response, next: NextFunction) {
