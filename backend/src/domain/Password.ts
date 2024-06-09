@@ -18,4 +18,11 @@ export default class Password {
     }
     return this.value;
   }
+
+  async matches(candidate: string): Promise<boolean> {
+    if (this.isHashed) {
+      return bcrypt.compare(candidate, this.value);
+    }
+    return false;
+  }
 }
