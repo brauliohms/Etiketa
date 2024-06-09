@@ -27,7 +27,6 @@ export default class Account {
     );
   }
 
-  // restaurar para alguns bancos
   static restore(
     accountId: string,
     name: string,
@@ -38,7 +37,15 @@ export default class Account {
       accountId,
       new Name(name),
       new Email(email),
-      new Password(password)
+      new Password(password, true)
     );
+  }
+
+  static toJson(accountId: string, name: string, email: string) {
+    return {
+      accountId,
+      name,
+      email,
+    };
   }
 }
