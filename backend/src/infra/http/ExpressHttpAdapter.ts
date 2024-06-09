@@ -59,7 +59,11 @@ export default class ExpressAdapter implements HttpServer {
     this.app.use(
       '/api-docs',
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
+      swaggerUi.setup(swaggerDocument, {
+        swaggerOptions: {
+          url: 'http://localhost:3000/api-docs/swagger.json',
+        },
+      })
     );
   }
 
