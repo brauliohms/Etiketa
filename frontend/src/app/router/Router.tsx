@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AuthLayout from "../../view/layouts/AuthLayout";
+import { DashboardLayout } from "../../view/layouts/DashboardLayout";
 import { Dashboard } from "../../view/pages/home/Dashboard";
 import { Signin } from "../../view/pages/signin/Signin";
 import { Signup } from "../../view/pages/signup/Signup";
@@ -17,7 +18,9 @@ export function Router() {
 				</Route>
 
 				<Route element={<AuthGuard isProtected />}>
-					<Route path="/" element={<Dashboard />} />
+					<Route element={<DashboardLayout />}>
+						<Route path="/" element={<Dashboard />} />
+					</Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>
