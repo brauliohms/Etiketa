@@ -3,3 +3,17 @@ export type UserInfoType = {
 	email: string;
 	avatar?: string;
 };
+
+export interface Account {
+	accountId: string;
+	name: string;
+	email: string;
+	password: string;
+	created_at: string;
+	updated_at: string;
+}
+
+export interface UserInterface {
+	account: Account;
+	token: string;
+}
