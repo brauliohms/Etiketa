@@ -1,23 +1,22 @@
 import UnauthorizedError from '../erros/UnauthorizedError';
 import AccountsRepository from '../repositories/AccountRepository';
-import { PasswordHasher } from '../utils/Hasher';
-import { AuthToken } from '../utils/AuthToken';
+import PasswordHasher from '../utils/Hasher';
+import AuthToken from '../utils/AuthToken';
 
 export default class AuthenticateUseCase {
   constructor(
     private readonly accountRepository: AccountsRepository,
     private readonly jwtService: AuthToken,
-    private passwordHasher: PasswordHasher
+    private readonly passwordHasher: PasswordHasher
   ) {}
 
   async execute(email: string, password: string) {
     const account = await this.accountRepository.findByEmail(email);
-    console.log(account);
     if (!account) throw new UnauthorizedError('Invalid Credentials', 401);
-
+    const encryptPassword = String(account.password);
     const passwordMatches = this.passwordHasher.comparePassword(
       password,
-      account.password.value
+      encryptPassword
     );
 
     if (!passwordMatches)

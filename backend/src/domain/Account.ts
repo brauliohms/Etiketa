@@ -41,11 +41,11 @@ export default class Account {
     );
   }
 
-  static toJson(accountId: string, name: string, email: string) {
-    return {
-      accountId,
-      name,
-      email,
-    };
-  }
+  // static toJson(accountId: string, name: string, email: string) {
+  //   return {
+  //     accountId,
+  //     name,
+  //     email,
+  //   };
+  // }
 }
