@@ -1,12 +1,39 @@
 version: '3.8'
+name: supertags-container
 services:
   postgres:
     image: postgres
+    container_name: supertags-database
+    restart: always
     environment:
-      POSTGRES_DB: your_database_name
-      POSTGRES_USER: your_database_user
-      POSTGRES_PASSWORD: your_database_password
+      POSTGRES_DB: supertags
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: backend-supertags
+    restart: always
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+volumes:
+  pgdata:
+    driver: local
