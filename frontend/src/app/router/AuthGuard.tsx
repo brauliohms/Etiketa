@@ -5,7 +5,7 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ isProtected }: AuthGuardProps) {
-	const user = true; //será alterado
+	const user = false; //será alterado
 
 	if (!user && isProtected) {
 		return <Navigate to="/signin" replace />;

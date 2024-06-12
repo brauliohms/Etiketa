@@ -1,10 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { z } from "zod";
+import { userService } from "../../../app/services/users";
 import { Button } from "../../components/Button";
 import { ErrorStringFeedback } from "../../components/ErrorStringFeedback";
 import { InputLabel } from "../../components/InputLabel";
+import { UserSignIn } from "../../types";
 
 const schema = z.object({
 	email: z.string().email("Preencha um email valído"),
@@ -22,7 +25,19 @@ export function Signin() {
 		resolver: zodResolver(schema),
 	});
 
-	const onSignin = (data: DataForm) => console.log(data);
+	const { mutateAsync } = useMutation({
+		mutationFn: (data: UserSignIn) => userService.signin(data),
+	});
+
+	const onSignin = async (dataf: UserSignIn) => {
+		console.log(dataf);
+		try {
+			const response = await mutateAsync(dataf);
+			console.log(response);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<div className="flex h-full w-full flex-col items-center justify-center gap-4 p-5 text-white">
 			<h1 className="max-w-[383px] text-center text-[32px] font-bold">
@@ -51,7 +66,9 @@ export function Signin() {
 					<ErrorStringFeedback message={errors?.password.message} />
 				)}
 
-				<Button className="mt-10">Login</Button>
+				<Button type="submit" className="mt-10">
+					Login
+				</Button>
 				<Link
 					className="flex h-10 items-center justify-center rounded-md border border-zinc-700 bg-transparent transition-opacity hover:opacity-80"
 					to="/signup"

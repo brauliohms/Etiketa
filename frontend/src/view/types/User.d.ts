@@ -17,3 +17,14 @@ export interface UserInterface {
 	account: Account;
 	token: string;
 }
+
+export interface UserSignIn {
+	email: string;
+	password: string;
+}
+
+export interface UserSignUp {
+	name: string;
+	email: string;
+	password: string;
+}

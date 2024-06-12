@@ -1,5 +1,5 @@
-import { Button } from "../Button";
-import { ConfIcon, PlusIcon, UserIcon } from "../Icons";
+import { Button } from "../../../../components/Button";
+import { ConfIcon, PlusIcon, UserIcon } from "../../../../components/Icons";
 import { MenuItem } from "./MenuItem";
 
 export function Menu() {
