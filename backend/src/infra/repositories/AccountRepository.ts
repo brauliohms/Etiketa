@@ -17,6 +17,12 @@ export default class KnexAccountsRepository implements AccountsRepository {
   async findByEmail(email: string): Promise<Account | undefined> {
     const result = await this.knex('accounts').where({ email }).first();
     if (!result) return undefined;
-    return result;
+    const account = new Account(
+      result.accountId,
+      result.name,
+      result.email,
+      result.password
+    );
+    return account;
   }
 }

@@ -1,9 +1,12 @@
 import Account from '../../domain/Account';
 import AccountsRepository from '../repositories/AccountRepository';
 import Password from '../../domain/Password';
+// import PasswordHasher from '../utils/Hasher';
 
 export default class CreateAccountUseCase {
-  constructor(private readonly accountRepository: AccountsRepository) {}
+  constructor(
+    private readonly accountRepository: AccountsRepository // private readonly hashPassword: PasswordHasher
+  ) {}
 
   async execute(input: Input): Promise<void> {
     const account = Account.create(input.name, input.email, input.password);

@@ -1,19 +1,22 @@
-FROM node:20
+FROM node:20.14.0-alpine AS builder
 
-# Crie e defina o diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
-# Copie o package.json e o package-lock.json (se existir) para o diretório de trabalho
 COPY package*.json ./
-
-# Instale as dependências do projeto
 RUN npm install
 
-# Copie o restante do código-fonte para o diretório de trabalho
 COPY . .
 
-# Exponha a porta 3000 para fora do contêiner
-EXPOSE 3333
+RUN npm run build
 
-# Defina o comando padrão para iniciar o aplicativo
-CMD ["npm", "start"]
+FROM node:20.14.0-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/package*.json ./
+
+EXPOSE 8080
+
+CMD ["npm", "run", "start"]

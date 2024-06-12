@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 
 export default class Password {
   constructor(readonly value: string, readonly isHashed: boolean = false) {
