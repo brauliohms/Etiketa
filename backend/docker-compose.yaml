@@ -12,16 +12,11 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
-
+      - pgdata:/var/lib/postgresql/data
   app:
     build: .
     container_name: backend-supertags
-    restart: always
-    volumes:
-      - .:/usr/src/app
-    depends_on:
-      - postgres
+    
     environment:
       NODE_ENV: ${NODE_ENV}
       JWT_SECRET: ${JWT_SECRET}
@@ -30,6 +25,8 @@ services:
       DATABASE_CLIENT: ${DATABASE_CLIENT}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_NAME: ${DATABASE_NAME}
+    depends_on:
+      - postgres
     ports:
       - "8080:8080"
     env_file:
