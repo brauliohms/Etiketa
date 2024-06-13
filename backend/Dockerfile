@@ -1,22 +1,31 @@
-FROM node:20.14.0-alpine AS builder
+# Estágio de construção
+FROM node:20-alpine AS build
 
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-COPY package*.json ./
+COPY package*.json .
+
 RUN npm install
 
 COPY . .
 
 RUN npm run build
 
-FROM node:20.14.0-alpine
+# Estágio final
+FROM node:20-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-COPY --from=builder /usr/src/app/dist ./dist
-COPY --from=builder /usr/src/app/node_modules ./node_modules
-COPY --from=builder /usr/src/app/package*.json ./
+COPY --from=build /usr/app .
 
-EXPOSE 8080
+# Instale o dockerize
+RUN apk add --no-cache --virtual .build-deps \
+    curl \
+    && curl -sSL https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
+    | tar -C /usr/local/bin -xzv
 
-CMD ["npm", "run", "start"]
+COPY entrypoint.sh .
+
+RUN chmod +x /usr/app/entrypoint.sh
+
+CMD ["/usr/app/entrypoint.sh"]
