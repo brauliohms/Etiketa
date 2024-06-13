@@ -10,6 +10,10 @@ import AuthenticateUseCase from './application/usecases/Authenticate';
 import AccountController from './infra/controllers/AccountController';
 import AuthMiddleware from './infra/http/middlewares/AuthMiddleware';
 import EnvChecker from './infra/configs/EnvsChecker';
+import { KnexTagsRepository } from './infra/repositories/TagRepository';
+import CreateTagUseCase from './application/usecases/CreateTag';
+import TagController from './infra/controllers/TagController';
+import GetTagUseCase from './application/usecases/GetTagById';
 
 EnvChecker.checkEnvVariables([
   'PORT',
@@ -22,18 +26,20 @@ EnvChecker.checkEnvVariables([
   'NODE_ENV',
 ]);
 
+// infra bootstrap
 const expressHttpServer = new ExpressAdapter();
-const accountRepository = new KnexAccountsRepository();
-const createAccountUseCase = new CreateAccountUseCase(accountRepository);
 const jwtAuth = new JwtTokenService();
 const bcryptHasher = new BcryptPasswordHasher();
 const authMiddleware = new AuthMiddleware(jwtAuth);
+
+// account bootstrap
+const accountRepository = new KnexAccountsRepository();
+const createAccountUseCase = new CreateAccountUseCase(accountRepository);
 const authenticateAccountUseCase = new AuthenticateUseCase(
   accountRepository,
   jwtAuth,
   bcryptHasher
 );
-
 new AccountController(
   expressHttpServer,
   createAccountUseCase,
@@ -41,6 +47,18 @@ new AccountController(
   authMiddleware
 );
 
+// tag bootstrap
+const tagRepository = new KnexTagsRepository();
+const createTagUseCase = new CreateTagUseCase(tagRepository);
+const getTagsUseCase = new GetTagUseCase(tagRepository);
+new TagController(
+  expressHttpServer,
+  createTagUseCase,
+  getTagsUseCase,
+  authMiddleware
+);
+
+// documentation bootstrap
 const swaggerFilePath = path.resolve(
   __dirname,
   'infra',
@@ -48,7 +66,12 @@ const swaggerFilePath = path.resolve(
   'swagger',
   'api.json'
 );
-
 expressHttpServer.setupSwagger(swaggerFilePath);
-expressHttpServer.use(cors());
+
+// server bootstrap
+expressHttpServer.use(
+  cors({
+    origin: '*',
+  })
+);
 expressHttpServer.listen(Number(process.env.PORT));

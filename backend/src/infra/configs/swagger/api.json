@@ -5,11 +5,27 @@
     "version": "1.0.0",
     "description": "Documentação para a Aplicação do curso formação dev"
   },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "paths": {
     "/signup": {
       "post": {
         "summary": "Create a new account",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -50,7 +66,9 @@
     "/signin": {
       "post": {
         "summary": "Authenticate an account",
-        "tags": ["Accounts"],
+        "tags": [
+          "Accounts"
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -75,6 +93,183 @@
           },
           "401": {
             "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tags": {
+      "post": {
+        "summary": "Create a new tag",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "properties": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string",
+                          "enum": [
+                            "date",
+                            "number",
+                            "text"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "value",
+                        "type"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "name",
+                  "properties"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tag created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/tags/{tagId}": {
+      "get": {
+        "summary": "Get a tag by ID",
+        "tags": [
+          "Tags"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tagId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tag found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "properties": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "value": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "date",
+                              "number",
+                              "text"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "value",
+                          "type"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "properties"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Tag not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/protected": {
+      "get": {
+        "summary": "Get information of the logged-in user",
+        "tags": [
+          "User"
+        ],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User information retrieved successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal server error"

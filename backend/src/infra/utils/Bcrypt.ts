@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import PasswordHasher from '../../application/utils/Hasher';
 
 export default class BcryptPasswordHasher implements PasswordHasher {
@@ -6,14 +6,15 @@ export default class BcryptPasswordHasher implements PasswordHasher {
     return bcrypt.hash(password, 10);
   }
 
-  async comparePassword(
+  comparePassword(
     plainPassword: string,
     hashedPassword: string
-  ): Promise<boolean | undefined> {
+  ): boolean | undefined {
     try {
       return bcrypt.compareSync(plainPassword, hashedPassword);
     } catch (error) {
       console.log(error);
+      return false;
     }
   }
 }

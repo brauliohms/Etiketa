@@ -3,5 +3,5 @@ export default interface PasswordHasher {
   comparePassword(
     plainPassword: string,
     hashedPassword: string
-  ): Promise<boolean | undefined>;
+  ): boolean | undefined;
 }

@@ -2,12 +2,36 @@ version: "3.8"
 services:
   postgres:
     image: postgres
+    container_name: supertags-database
+    restart: always
     environment:
-      POSTGRES_DB: etiketa_db
-      POSTGRES_USER: usuario
-      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     ports:
       - "5432:5432"
+    env_file:
+      - .env
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
+  app:
+    build: .
+    container_name: backend-supertags
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_CLIENT: ${DATABASE_CLIENT}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_NAME: ${DATABASE_NAME}
+    depends_on:
+      - postgres
+    ports:
+      - "${PORT}:8080"
+    env_file:
+      - .env
+volumes:
+  pgdata:
+    driver: local

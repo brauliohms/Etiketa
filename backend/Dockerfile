@@ -1,19 +1,31 @@
-FROM node:20
+# Estágio de construção
+FROM node:20-alpine AS build
 
-# Crie e defina o diretório de trabalho dentro do contêiner
-WORKDIR /usr/src/app
+WORKDIR /usr/app
 
-# Copie o package.json e o package-lock.json (se existir) para o diretório de trabalho
-COPY package*.json ./
+COPY package*.json .
 
-# Instale as dependências do projeto
 RUN npm install
 
-# Copie o restante do código-fonte para o diretório de trabalho
 COPY . .
 
-# Exponha a porta 3000 para fora do contêiner
-EXPOSE 3333
+RUN npm run build
 
-# Defina o comando padrão para iniciar o aplicativo
-CMD ["npm", "start"]
+# Estágio final
+FROM node:20-alpine
+
+WORKDIR /usr/app
+
+COPY --from=build /usr/app .
+
+# Instale o dockerize
+RUN apk add --no-cache --virtual .build-deps \
+    curl \
+    && curl -sSL https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
+    | tar -C /usr/local/bin -xzv
+
+COPY entrypoint.sh .
+
+RUN chmod +x /usr/app/entrypoint.sh
+
+CMD ["/usr/app/entrypoint.sh"]
