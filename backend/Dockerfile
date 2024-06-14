@@ -3,7 +3,7 @@ FROM node:20-alpine AS build
 
 WORKDIR /usr/app
 
-COPY package*.json .
+COPY package*.json ./
 
 RUN npm install
 
@@ -16,7 +16,7 @@ FROM node:20-alpine
 
 WORKDIR /usr/app
 
-COPY --from=build /usr/app .
+COPY --from=build /usr/app ./
 
 # Instale o dockerize
 RUN apk add --no-cache --virtual .build-deps \
@@ -24,7 +24,7 @@ RUN apk add --no-cache --virtual .build-deps \
     && curl -sSL https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-alpine-linux-amd64-v0.6.1.tar.gz \
     | tar -C /usr/local/bin -xzv
 
-COPY entrypoint.sh .
+COPY entrypoint.sh ./
 
 RUN chmod +x /usr/app/entrypoint.sh
 
