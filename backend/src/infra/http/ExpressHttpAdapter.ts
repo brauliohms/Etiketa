@@ -1,7 +1,7 @@
-import express, { Request, Response, NextFunction } from 'express';
-import swaggerUi from 'swagger-ui-express';
-import fs from 'fs';
-import HttpServer from './HttpServer';
+import express, { NextFunction, Request, Response } from "express";
+import fs from "fs";
+import swaggerUi from "swagger-ui-express";
+import HttpServer from "./HttpServer";
 
 export interface IRequest {
   body: any;
@@ -18,6 +18,7 @@ export default class ExpressAdapter implements HttpServer {
   constructor() {
     this.app = express();
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
   }
 
   use(middleware: (req: Request, res: Response, next: NextFunction) => void) {
@@ -54,14 +55,14 @@ export default class ExpressAdapter implements HttpServer {
 
   setupSwagger(swaggerFilePath: string): void {
     const swaggerDocument = JSON.parse(
-      fs.readFileSync(swaggerFilePath, 'utf8')
+      fs.readFileSync(swaggerFilePath, "utf8")
     );
     this.app.use(
-      '/api-docs',
+      "/api-docs",
       swaggerUi.serve,
       swaggerUi.setup(swaggerDocument, {
         swaggerOptions: {
-          url: 'http://localhost:3000/api-docs/swagger.json',
+          url: "http://localhost:3000/api-docs/swagger.json",
         },
       })
     );
